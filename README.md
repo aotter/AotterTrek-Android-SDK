@@ -1,5 +1,7 @@
 # AotterTrek-Android-SDK
 ## 更新日誌
+* 2017/11/14 - release 1.4.7<br />
+update AdListener
 * 2017/11/09 - release 1.4.6<br />
 新增原生互動廣告 InterActive Ad
 * 2017/08/31 - release 1.3.2<br />
