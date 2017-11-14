@@ -90,6 +90,16 @@ public class NativeListViewActivity extends AppCompatActivity {
             public void onAdFail() {
                 Log.d("NativeListViewActivity", "No Ad");
             }
+
+            @Override
+            public void onAdClicked(NativeAd nativeAd) {
+
+            }
+
+            @Override
+            public void onAdImpression(NativeAd nativeAd) {
+
+            }
         });
     }
 

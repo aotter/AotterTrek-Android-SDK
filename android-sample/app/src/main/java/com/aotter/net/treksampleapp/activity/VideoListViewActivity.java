@@ -86,6 +86,16 @@ public class VideoListViewActivity extends AppCompatActivity {
             public void onAdFail() {
                 Log.d("VideoListViewActivity", "No Ad");
             }
+
+            @Override
+            public void onAdClicked(NativeAd nativeAd) {
+
+            }
+
+            @Override
+            public void onAdImpression(NativeAd nativeAd) {
+
+            }
         });
     }
 
