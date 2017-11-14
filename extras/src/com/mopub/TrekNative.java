@@ -183,6 +183,16 @@ public class TrekNative extends CustomEventNative {
             mCustomEventNativeListener.onNativeAdFailed(NativeErrorCode.UNSPECIFIED);
         }
 
+        @Override
+        public void onAdClicked(NativeAd nativeAd) {
+
+        }
+
+        @Override
+        public void onAdImpression(NativeAd nativeAd) {
+
+        }
+
 
         // Lifecycle Handlers
         @Override
@@ -329,6 +339,16 @@ public class TrekNative extends CustomEventNative {
         @Override
         public void onAdFail() {
             mCustomEventNativeListener.onNativeAdFailed(NativeErrorCode.UNSPECIFIED);
+        }
+
+        @Override
+        public void onAdClicked(NativeAd nativeAd) {
+
+        }
+
+        @Override
+        public void onAdImpression(NativeAd nativeAd) {
+
         }
 
         /**
