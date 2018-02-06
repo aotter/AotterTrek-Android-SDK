@@ -22,6 +22,8 @@
         </activity>
         <activity android:name=".activity.InterActiveListViewActivity">
         </activity>
+        <activity android:name=".activity.NativeRCViewActivity">
+        </activity>
         <activity
             android:name="com.aotter.net.trek.ads.video.NativeVideoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"/>

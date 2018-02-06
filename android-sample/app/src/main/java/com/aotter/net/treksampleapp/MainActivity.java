@@ -10,6 +10,7 @@ import com.aotter.net.trek.ads.TrekAd;
 import com.aotter.net.trek.ads.interfaces.InstreamVideoListener;
 import com.aotter.net.treksampleapp.activity.InterActiveListViewActivity;
 import com.aotter.net.treksampleapp.activity.NativeListViewActivity;
+import com.aotter.net.treksampleapp.activity.NativeRCViewActivity;
 import com.aotter.net.treksampleapp.activity.VideoListViewActivity;
 
 import butterknife.ButterKnife;
@@ -64,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
                 //影片播放完畢
             }
         });
+    }
+
+    @OnClick(R.id.native_rcview)
+    public void goNativeRCList() {
+        Intent intent = new Intent();
+        intent.setClass(this, NativeRCViewActivity.class);
+        startActivity(intent);
     }
 
     @OnClick(R.id.native_listview)
