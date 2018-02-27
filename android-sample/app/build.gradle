@@ -36,5 +36,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile(group: 'com.aotter.net', name: 'trek', version: '1.4.13', ext: 'aar')
+    compile(group: 'com.aotter.net', name: 'trek', version: '1.4.14', ext: 'aar')
 }
