@@ -2,16 +2,15 @@ package com.aotter.net.treksampleapp.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 
 import com.aotter.net.trek.ads.TKAdN;
 import com.aotter.net.trek.ads.interfaces.AdListener;
 import com.aotter.net.trek.model.NativeAd;
 import com.aotter.net.treksampleapp.R;
-import com.aotter.net.treksampleapp.adapter.NativeListItemAdapter;
 import com.aotter.net.treksampleapp.adapter.NativeRCListItemAdapter;
 
 import java.util.ArrayList;
