@@ -17,7 +17,7 @@ buildscript {
 allprojects {
     repositories {
         maven {
-            url "http://aotter.net:8081/artifactory/libs-release-local"
+            url "https://deps.aotter.net/artifactory/libs-release-local"
         }
         jcenter()
         google()

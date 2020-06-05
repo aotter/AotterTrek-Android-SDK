@@ -2,7 +2,6 @@ package com.aotter.net.treksampleapp.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import androidx.cardview.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aotter.net.trek.ads.TKAdN;
-import com.aotter.net.trek.model.NativeAd;
+import com.aotter.net.trek.model.TKAdNative;
 import com.aotter.net.treksampleapp.R;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import androidx.cardview.widget.CardView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -34,7 +34,7 @@ public class NativeListItemAdapter extends BaseAdapter {
     private Context mContext;
 
     private TKAdN mTKAdN;
-    private NativeAd mAd;
+    private TKAdNative mAd;
     private static final int AD_INDEX = 2;
 
     private View mAdView;
@@ -118,7 +118,7 @@ public class NativeListItemAdapter extends BaseAdapter {
                 // Setting the Text
 
                 Glide.with(mContext)
-                        .load(mAd.getAdImg_main())
+                        .load(mAd.getAdImgMain())
                         .crossFade()
                         .into(adholder.nativeAdImage);
                 adholder.nativeAdPublisher.setText(mAd.getAdSponsor());
@@ -126,7 +126,7 @@ public class NativeListItemAdapter extends BaseAdapter {
                 adholder.nativeAdSummary.setText(mAd.getAdText());
                 adholder.nativeAdButton.setText(mAd.getActionText());
 
-                mTKAdN.registerViewForInteraction((Activity) mContext, adholder.mAd_content_layout, mAd);
+                mTKAdN.registerAdView((Activity) mContext, adholder.mAd_content_layout, mAd);
                 break;
         }
         return convertView;
@@ -177,7 +177,7 @@ public class NativeListItemAdapter extends BaseAdapter {
     }
 
 
-    public synchronized void addNativeAd(TKAdN tkAdN, NativeAd ad) {
+    public synchronized void addTkAdNative(TKAdN tkAdN, TKAdNative ad) {
         if (tkAdN == null || ad == null) {
             return;
         }

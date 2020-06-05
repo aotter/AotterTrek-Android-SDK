@@ -13,7 +13,7 @@ public class MyApplication extends Application {
         super.onCreate();
 
         // init AotterTrek
-        AotterTrek.init(this, "DNgNhOwfbUkOqcQFI+uD", "1k+sYKMLZrclCRmgw/esYNZbjAhArT7Vn42cxfn3f/tgmT0XJZI4mNiNwBYLu9GOet7YtiT6");
+        AotterTrek.initTrekService(this, "DNgNhOwfbUkOqcQFI+uD", "1k+sYKMLZrclCRmgw/esYNZbjAhArT7Vn42cxfn3f/tgmT0XJZI4mNiNwBYLu9GOet7YtiT6");
         AotterTrek.setEmail("XXXXXXXX@gmail.com")
                 .setFbId("123455566");
     }

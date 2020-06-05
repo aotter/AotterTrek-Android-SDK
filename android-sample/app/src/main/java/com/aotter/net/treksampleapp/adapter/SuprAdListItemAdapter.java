@@ -2,23 +2,24 @@ package com.aotter.net.treksampleapp.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import androidx.cardview.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aotter.net.trek.ads.TKAdN;
-import com.aotter.net.trek.ads.view.TrekMediaView;
-import com.aotter.net.trek.model.NativeAd;
+import com.aotter.net.trek.ads.view.TKMediaView;
+import com.aotter.net.trek.model.TKAdNative;
 import com.aotter.net.treksampleapp.R;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import androidx.cardview.widget.CardView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -28,22 +29,20 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
  * Created by SmallMouth on 2016/12/13.
  */
 
-public class InterListItemAdapter extends BaseAdapter {
-
+public class SuprAdListItemAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private Context mContext;
 
     private TKAdN mTKAdN;
-    private NativeAd mAd;
-    private static final int AD_INDEX = 2;
+    private TKAdNative mAd;
+    private static final int AD_INDEX = 1;
 
     private View mAdView;
 
     private List<Object> mPostTitleList;
     private List<Object> mPostImageList;
-    private TrekMediaView trekMediaView;
 
-    public InterListItemAdapter(Context context, List<Object> titlelist, List<Object> imagelist) {
+    public SuprAdListItemAdapter(Context context, List<Object> titlelist, List<Object> imagelist) {
         this.inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         this.mContext = context;
         this.mPostTitleList = titlelist;
@@ -57,10 +56,7 @@ public class InterListItemAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        if (position == AD_INDEX && mAd != null)
-            return mAdView;
-        else
-            return null;
+        return null;
     }
 
     @Override
@@ -104,32 +100,25 @@ public class InterListItemAdapter extends BaseAdapter {
                         .into(holder.mPost_image);
                 break;
             case 1:
-                AdViewHolder adholder;
+                VideoViewHolder videoholder;
                 if (convertView != null) {
-                    adholder = (AdViewHolder) convertView.getTag();
+                    videoholder = (VideoViewHolder) convertView.getTag();
                 } else {
-                    convertView = inflater.inflate(R.layout.adinteractive_item, parent, false);
-                    adholder = new AdViewHolder(convertView);
-                    convertView.setTag(adholder);
+                    convertView = inflater.inflate(R.layout.advideo_item, parent, false);
+                    videoholder = new VideoViewHolder(convertView);
+                    convertView.setTag(videoholder);
                 }
 
                 // Setting the Text
-                adholder.nativeAdPublisher.setText(mAd.getAdSponsor());
-                adholder.nativeAdTitle.setText(mAd.getAdTitle());
-                adholder.nativeAdSummary.setText(mAd.getAdText());
+                videoholder.nativeAdPublisher.setText(mAd.getAdSponsor());
+                videoholder.nativeAdTitle.setText(mAd.getAdTitle());
+                videoholder.nativeAdSummary.setText(mAd.getAdText());
+                videoholder.nativeAdButton.setText(mAd.getActionText());
 
-                trekMediaView = adholder.trekMediaView;
-                mTKAdN.registerViewForInteraction((Activity) mContext, adholder.trekMediaView, mAd);
+                mTKAdN.registerAdView((Activity) mContext, videoholder.mAd_content_layout, videoholder.suprAdVideoView, mAd);
                 break;
         }
         return convertView;
-    }
-
-    public TrekMediaView getMediaView() {
-        if (trekMediaView != null) {
-            return trekMediaView;
-        }
-        return null;
     }
 
     class ViewHolder {
@@ -151,7 +140,7 @@ public class InterListItemAdapter extends BaseAdapter {
         }
     }
 
-    class AdViewHolder {
+    class VideoViewHolder {
 
         @BindView(R.id.ad_content_layout)
         LinearLayout mAd_content_layout;
@@ -159,23 +148,24 @@ public class InterListItemAdapter extends BaseAdapter {
         @BindView(R.id.ad_publisher)
         TextView nativeAdPublisher;
 
-        @BindView(R.id.ad_media)
-        TrekMediaView trekMediaView;
-
         @BindView(R.id.ad_title)
         TextView nativeAdTitle;
 
         @BindView(R.id.ad_summary)
         TextView nativeAdSummary;
 
+        @BindView(R.id.ad_button)
+        Button nativeAdButton;
 
-        public AdViewHolder(View view) {
+        @BindView(R.id.ad_videoview)
+        TKMediaView suprAdVideoView;
+
+        public VideoViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
 
-
-    public synchronized void addNativeAd(TKAdN tkAdN, NativeAd ad) {
+    public synchronized void addTkAdNative(TKAdN tkAdN, TKAdNative ad) {
         if (tkAdN == null || ad == null) {
             return;
         }
@@ -191,9 +181,10 @@ public class InterListItemAdapter extends BaseAdapter {
         }
         this.mAd = ad;
         this.mTKAdN = tkAdN;
-        mAdView = inflater.inflate(R.layout.adinteractive_item, null);
+        mAdView = inflater.inflate(R.layout.advideo_item, null);
         mPostTitleList.add(AD_INDEX, mAdView);
         mPostImageList.add(AD_INDEX, mAdView);
         this.notifyDataSetChanged();
     }
+
 }

@@ -2,20 +2,20 @@ package com.aotter.net.treksampleapp.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 
 import com.aotter.net.trek.ads.TKAdN;
-import com.aotter.net.trek.ads.interfaces.AdListener;
-import com.aotter.net.trek.model.NativeAd;
+import com.aotter.net.trek.ads.TKError;
+import com.aotter.net.trek.ads.interfaces.TKAdListener;
+import com.aotter.net.trek.model.TKAdNative;
 import com.aotter.net.treksampleapp.R;
 import com.aotter.net.treksampleapp.adapter.NativeRCListItemAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -117,27 +117,26 @@ public class NativeRCViewActivity extends AppCompatActivity {
          tkAdN = new TKAdN(this, "post_third"); if don't have category, you can without it.
          **/
         tkAdN = new TKAdN(this, "post_third", "NATIVE");
-        tkAdN.setAdListener(new AdListener() {
+        tkAdN.setAdListener(new TKAdListener() {
 
             @Override
-            public void onAdLoaded(NativeAd nativeAd) {
+            public void onAdError(TKError tkError) {
+            }
+
+            @Override
+            public void onAdLoaded(TKAdNative nativeAd) {
                 if (nativeAd != null && mAdapter != null) {
-                    mAdapter.addNativeAd(tkAdN, nativeAd);
+                    mAdapter.addTkAdNative(tkAdN, nativeAd);
                 }
             }
 
             @Override
-            public void onAdFail() {
-                Log.d("NativeListViewActivity", "No Ad");
-            }
-
-            @Override
-            public void onAdClicked(NativeAd nativeAd) {
+            public void onAdClicked(TKAdNative nativeAd) {
 
             }
 
             @Override
-            public void onAdImpression(NativeAd nativeAd) {
+            public void onAdImpression(TKAdNative nativeAd) {
 
             }
         });

@@ -2,8 +2,6 @@ package com.aotter.net.treksampleapp.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +11,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aotter.net.trek.ads.TKAdN;
-import com.aotter.net.trek.model.NativeAd;
+import com.aotter.net.trek.model.TKAdNative;
 import com.aotter.net.treksampleapp.R;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 public class NativeRCListItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private TKAdN mTKAdN;
-    private NativeAd mAd;
+    private TKAdNative mAd;
     private static final int AD_INDEX = 5;
     private List<Object> mPostTitleList;
     private List<Object> mPostImageList;
@@ -102,7 +102,7 @@ public class NativeRCListItemAdapter extends RecyclerView.Adapter<RecyclerView.V
             // Setting the Text
 
             Glide.with(mContext)
-                    .load(mAd.getAdImg_main())
+                    .load(mAd.getAdImgMain())
                     .crossFade()
                     .into(nativeAdImage);
             nativeAdPublisher.setText(mAd.getAdSponsor());
@@ -110,7 +110,7 @@ public class NativeRCListItemAdapter extends RecyclerView.Adapter<RecyclerView.V
             nativeAdSummary.setText(mAd.getAdText());
             nativeAdButton.setText(mAd.getActionText());
 
-            mTKAdN.registerViewForInteraction((Activity) mContext, mAd_content_layout, mAd);
+            mTKAdN.registerAdView((Activity) mContext, mAd_content_layout, mAd);
         }
     }
 
@@ -159,7 +159,7 @@ public class NativeRCListItemAdapter extends RecyclerView.Adapter<RecyclerView.V
         return mPostTitleList.size();
     }
 
-    public synchronized void addNativeAd(TKAdN tkAdN, NativeAd ad) {
+    public synchronized void addTkAdNative(TKAdN tkAdN, TKAdNative ad) {
         if (tkAdN == null || ad == null) {
             return;
         }
