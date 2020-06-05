@@ -2,18 +2,16 @@ package com.mopub.nativeads;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
-import com.aotter.net.trek.ads.TKAdN;
-import com.aotter.net.trek.ads.interfaces.AdListener;
-import com.aotter.net.trek.ads.view.NativeVideoView;
-import com.aotter.net.trek.ads.view.TrekMediaView;
-import com.aotter.net.trek.model.NativeAd;
-import com.mopub.common.Preconditions;
+import androidx.annotation.NonNull;
 
+import com.aotter.net.trek.ads.TKAdN;
+import com.aotter.net.trek.ads.TKError;
+import com.aotter.net.trek.ads.interfaces.TKAdListener;
+import com.aotter.net.trek.ads.view.TKMediaView;
+import com.aotter.net.trek.model.TKAdNative;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,16 +28,13 @@ public class TrekNative extends CustomEventNative {
     private static final String TAG = "TrekAdRendererDebug";
 
     private static final String PLACE_NAME_KEY = "place_name";
-    private static final String BOOLEAN_MYAPP_KEY = "isTKMyApp";
     private static final String TREK_ADTYPE_KEY = "adType";
 
     private static final String TREK_ADTYPE_NATIVE = "NATIVE";
-    private static final String TREK_ADTYPE_NATIVE_VIDEO = "NATIVE_VIDEO";
-    private static final String TREK_ADTYPE_NATIVE_INTERACTIVE = "NATIVE_INTERACTIVE";
+    private static final String TREK_ADTYPE_SUPR_AD = "SUPR_AD";
     public static final String TREK_AD_CATEGORY = "category";
 
     private static Boolean sIsVideoRendererAvailable = null;
-    private boolean isTKMyApp = false;
 
     @Override
     protected void loadNativeAd(@NonNull final Context context,
@@ -56,9 +51,6 @@ public class TrekNative extends CustomEventNative {
         }
 
         final String trekAdType;
-        if (serverExtras.containsKey(BOOLEAN_MYAPP_KEY)) {
-            isTKMyApp = Boolean.parseBoolean(serverExtras.get(BOOLEAN_MYAPP_KEY));
-        }
 
         if (serverExtras.containsKey(TREK_ADTYPE_KEY)) {
             trekAdType = serverExtras.get(TREK_ADTYPE_KEY);
@@ -66,19 +58,19 @@ public class TrekNative extends CustomEventNative {
             trekAdType = "NATIVE";
         }
 
-        final String[] categories;
+        final String categories;
 
         if (localExtras.containsKey(TREK_AD_CATEGORY)) {
-            categories = (String[]) localExtras.get(TREK_AD_CATEGORY);
+            categories = (String) localExtras.get(TREK_AD_CATEGORY);
         } else {
             categories = null;
         }
 
-        boolean videoEnabledFromServer = TextUtils.equals(trekAdType, TREK_ADTYPE_NATIVE_VIDEO) || TextUtils.equals(trekAdType, TREK_ADTYPE_NATIVE_INTERACTIVE);
+        boolean videoEnabledFromServer = TextUtils.equals(trekAdType, TREK_ADTYPE_SUPR_AD);
 
         if (sIsVideoRendererAvailable == null) {
             try {
-                Class.forName("com.mopub.nativeads.TrekMediaAdRenderer");
+                Class.forName("com.mopub.nativeads.TrekAdRenderer");
                 sIsVideoRendererAvailable = true;
             } catch (ClassNotFoundException e) {
                 sIsVideoRendererAvailable = false;
@@ -87,12 +79,12 @@ public class TrekNative extends CustomEventNative {
 
         if (shouldUseVideoEnabledNativeAd(sIsVideoRendererAvailable, videoEnabledFromServer)) {
             final TrekMediaEnabledNativeAd trekMediaEnabledNativeAd =
-                    new TrekMediaEnabledNativeAd(context, isTKMyApp,
+                    new TrekMediaEnabledNativeAd(context,
                             new TKAdN(context, placeName, categories, trekAdType), customEventNativeListener);
             trekMediaEnabledNativeAd.loadAd();
         } else {
             final TrekStaticNativeAd trekStaticNativeAd = new TrekStaticNativeAd(
-                    context, isTKMyApp, new TKAdN(context, placeName, categories, trekAdType),
+                    context, new TKAdN(context, placeName, categories, trekAdType),
                     new ImpressionTracker(context),
                     new NativeClickHandler(context),
                     customEventNativeListener);
@@ -113,7 +105,7 @@ public class TrekNative extends CustomEventNative {
     }
 
 
-    static class TrekStaticNativeAd extends StaticNativeAd implements AdListener {
+    static class TrekStaticNativeAd extends StaticNativeAd implements TKAdListener {
         private static final String SPONSOR_CONTEXT_FOR_AD = "sponsor";
         private static final String ADVERTISER_NAME_FOR_AD = "advertiserName";
         private static final String TREK_DEV_NATIVE_AD = "devNativeAd";
@@ -123,14 +115,13 @@ public class TrekNative extends CustomEventNative {
         private final ImpressionTracker mImpressionTracker;
         private final NativeClickHandler mNativeClickHandler;
         private final CustomEventNativeListener mCustomEventNativeListener;
-        private final boolean isTKMyApp;
 
         private String mImpUrl;
         private String mAdTrekClickUrl;
         private String mAdClickUrl;
 
         TrekStaticNativeAd(final Context context,
-                           boolean isTKMyApp, final TKAdN tkAdN,
+                           final TKAdN tkAdN,
                            final ImpressionTracker impressionTracker,
                            final NativeClickHandler nativeClickHandler,
                            final CustomEventNativeListener customEventNativeListener) {
@@ -139,20 +130,20 @@ public class TrekNative extends CustomEventNative {
             mImpressionTracker = impressionTracker;
             mNativeClickHandler = nativeClickHandler;
             mCustomEventNativeListener = customEventNativeListener;
-            this.isTKMyApp = isTKMyApp;
         }
 
         void loadAd() {
-            if (isTKMyApp) {
-                mTKAdN.setTKMyAppListener(this);
-            } else {
-                mTKAdN.setAdListener(this);
-            }
+            mTKAdN.setAdListener(this);
         }
 
         @Override
-        public void onAdLoaded(NativeAd nativeAd) {
-            NativeAd mNativeAd = nativeAd;
+        public void onAdError(TKError tkError) {
+            mCustomEventNativeListener.onNativeAdFailed(NativeErrorCode.UNSPECIFIED);
+        }
+
+        @Override
+        public void onAdLoaded(TKAdNative nativeAd) {
+            TKAdNative mNativeAd = nativeAd;
             if (mNativeAd == null) {
                 mCustomEventNativeListener.onNativeAdFailed(NativeErrorCode.NETWORK_INVALID_STATE);
                 return;
@@ -161,8 +152,8 @@ public class TrekNative extends CustomEventNative {
             setTitle(mNativeAd.getAdTitle());
             setText(mNativeAd.getAdText());
 
-            setMainImageUrl(mNativeAd.getAdImg_main());
-            setIconImageUrl(mNativeAd.getAdImg_icon_hd());
+            setMainImageUrl(mNativeAd.getAdImgMain());
+            setIconImageUrl(mNativeAd.getAdImgIconHd());
             mImpUrl = mTKAdN.urlImpression(mNativeAd);
             mAdClickUrl = mTKAdN.urlClick(mNativeAd);
             mAdTrekClickUrl = mTKAdN.urlTrek(mNativeAd);
@@ -172,7 +163,7 @@ public class TrekNative extends CustomEventNative {
             }
 
             addExtra(SPONSOR_CONTEXT_FOR_AD, mNativeAd.getAdSponsor());
-            addExtra(ADVERTISER_NAME_FOR_AD, mNativeAd.getAdAdvertiserName());
+            addExtra(ADVERTISER_NAME_FOR_AD, mNativeAd.getAdvertiserName());
             addExtra(TREK_DEV_NATIVE_AD, mNativeAd);
 
             final List<String> imageUrls = new ArrayList<String>();
@@ -199,20 +190,14 @@ public class TrekNative extends CustomEventNative {
         }
 
         @Override
-        public void onAdFail() {
-            mCustomEventNativeListener.onNativeAdFailed(NativeErrorCode.UNSPECIFIED);
-        }
-
-        @Override
-        public void onAdClicked(NativeAd nativeAd) {
+        public void onAdClicked(TKAdNative tkAdNative) {
 
         }
 
         @Override
-        public void onAdImpression(NativeAd nativeAd) {
+        public void onAdImpression(TKAdNative tkAdNative) {
 
         }
-
 
         // Lifecycle Handlers
         @Override
@@ -238,14 +223,14 @@ public class TrekNative extends CustomEventNative {
         @Override
         public void recordImpression(final View view) {
             notifyAdImpressed();
-            NativeAd ad = (NativeAd) getExtra(TREK_DEV_NATIVE_AD);
+            TKAdNative ad = (TKAdNative) getExtra(TREK_DEV_NATIVE_AD);
             mTKAdN.recordTrekImp(ad);
         }
 
         @Override
         public void handleClick(final View view) {
             notifyAdClicked();
-            NativeAd ad = (NativeAd) getExtra(TREK_DEV_NATIVE_AD);
+            TKAdNative ad = (TKAdNative) getExtra(TREK_DEV_NATIVE_AD);
             if (!TextUtils.isEmpty(getClickDestinationUrl())) {
                 mNativeClickHandler.openClickDestinationUrl(getClickDestinationUrl(), view);
                 mTKAdN.recordTrekClick(ad);
@@ -257,7 +242,7 @@ public class TrekNative extends CustomEventNative {
     }
 
 
-    static class TrekMediaEnabledNativeAd extends BaseNativeAd implements AdListener {
+    static class TrekMediaEnabledNativeAd extends BaseNativeAd implements TKAdListener {
         private static final String SPONSOR_CONTEXT_FOR_AD = "sponsor";
         private static final String TREK_ADTYPE = "trekAdType";
         private static final String ADVERTISER_NAME_FOR_AD = "advertiserName";
@@ -270,72 +255,36 @@ public class TrekNative extends CustomEventNative {
         private final CustomEventNativeListener mCustomEventNativeListener;
 
         private final Map<String, Object> mExtras;
-        private final boolean isTKMyApp;
-        private NativeAd mNativeAd;
+        private TKAdNative mNativeAd;
 
         TrekMediaEnabledNativeAd(final Context context,
-                                 boolean isTKMyApp, final TKAdN tkAdN,
+                                 final TKAdN tkAdN,
                                  final CustomEventNativeListener customEventNativeListener) {
             mContext = context.getApplicationContext();
             mTKAdN = tkAdN;
             mCustomEventNativeListener = customEventNativeListener;
             mExtras = new HashMap<String, Object>();
-            this.isTKMyApp = isTKMyApp;
         }
 
         void loadAd() {
-            if (isTKMyApp) {
-                mTKAdN.setTKMyAppListener(this);
-            } else {
-                mTKAdN.setAdListener(this);
-            }
-        }
-
-        /**
-         * Returns the String corresponding to the ad's title.
-         */
-        final public String getTitle() {
-            return mNativeAd.getAdTitle();
-        }
-
-        /**
-         * Returns the String corresponding to the ad's body text. May be null.
-         */
-        final public String getText() {
-            return mNativeAd.getAdText();
-        }
-
-        /**
-         * Returns the String url corresponding to the ad's main image. May be null.
-         */
-        final public String getMainImageUrl() {
-            return mNativeAd.getAdImg_main();
-        }
-
-        /**
-         * Returns the String url corresponding to the ad's icon image. May be null.
-         */
-        final public String getIconImageUrl() {
-            return mNativeAd.getAdImg_icon_hd();
-        }
-
-        /**
-         * Returns the Call To Action String (i.e. "Download" or "Learn More") associated with this ad.
-         */
-        final public String getCallToAction() {
-            return mNativeAd.getActionText();
+            mTKAdN.setAdListener(this);
         }
 
         @Override
-        public void onAdLoaded(NativeAd nativeAd) {
-            mNativeAd = nativeAd;
+        public void onAdError(TKError tkError) {
+
+        }
+
+        @Override
+        public void onAdLoaded(TKAdNative tkAdNative) {
+            mNativeAd = tkAdNative;
             if (mNativeAd == null) {
                 mCustomEventNativeListener.onNativeAdFailed(NativeErrorCode.NETWORK_INVALID_STATE);
                 return;
             }
 
             addExtra(SPONSOR_CONTEXT_FOR_AD, mNativeAd.getAdSponsor());
-            addExtra(ADVERTISER_NAME_FOR_AD, mNativeAd.getAdAdvertiserName());
+            addExtra(ADVERTISER_NAME_FOR_AD, mNativeAd.getAdvertiserName());
             addExtra(TREK_ADTYPE, mNativeAd.getAdType());
 
             final List<String> imageUrls = new ArrayList<String>();
@@ -363,18 +312,48 @@ public class TrekNative extends CustomEventNative {
         }
 
         @Override
-        public void onAdFail() {
-            mCustomEventNativeListener.onNativeAdFailed(NativeErrorCode.UNSPECIFIED);
-        }
-
-        @Override
-        public void onAdClicked(NativeAd nativeAd) {
+        public void onAdClicked(TKAdNative tkAdNative) {
 
         }
 
         @Override
-        public void onAdImpression(NativeAd nativeAd) {
+        public void onAdImpression(TKAdNative tkAdNative) {
 
+        }
+
+        /**
+         * Returns the String corresponding to the ad's title.
+         */
+        final public String getTitle() {
+            return mNativeAd.getAdTitle();
+        }
+
+        /**
+         * Returns the String corresponding to the ad's body text. May be null.
+         */
+        final public String getText() {
+            return mNativeAd.getAdText();
+        }
+
+        /**
+         * Returns the String url corresponding to the ad's main image. May be null.
+         */
+        final public String getMainImageUrl() {
+            return mNativeAd.getAdImgMain();
+        }
+
+        /**
+         * Returns the String url corresponding to the ad's icon image. May be null.
+         */
+        final public String getIconImageUrl() {
+            return mNativeAd.getAdImgIconHd();
+        }
+
+        /**
+         * Returns the Call To Action String (i.e. "Download" or "Learn More") associated with this ad.
+         */
+        final public String getCallToAction() {
+            return mNativeAd.getActionText();
         }
 
         /**
@@ -389,9 +368,9 @@ public class TrekNative extends CustomEventNative {
 
 
         final public void addExtra(final String key, final Object value) {
-            if (!Preconditions.NoThrow.checkNotNull(key, "addExtra key is not allowed to be null")) {
-                return;
-            }
+//            if (!Preconditions.NoThrow.checkNotNull(key, "addExtra key is not allowed to be null")) {
+//                return;
+//            }
             mExtras.put(key, value);
         }
 
@@ -409,15 +388,10 @@ public class TrekNative extends CustomEventNative {
 
         }
 
-        public void updateVideoView(Activity mActivity, View view, NativeVideoView nativeVideoView) {
-            if (nativeVideoView != null) {
-                mTKAdN.registerVideoViewForInteraction(mActivity, view, nativeVideoView, mNativeAd);
-            }
-        }
 
-        public void updateMediaView(Activity mActivity, TrekMediaView trekMediaView) {
+        public void updateMediaView(Activity mActivity, View view, TKMediaView trekMediaView) {
             if (trekMediaView != null) {
-                mTKAdN.registerViewForInteraction(mActivity, trekMediaView, mNativeAd);
+                mTKAdN.registerAdView(mActivity, view, trekMediaView, mNativeAd);
             }
         }
     }

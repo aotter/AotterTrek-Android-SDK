@@ -2,8 +2,6 @@ package com.mopub.nativeads;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.aotter.net.trek.ads.view.NativeVideoView;
-import com.aotter.net.trek.ads.view.TrekMediaView;
-import com.mopub.common.Preconditions;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.aotter.net.trek.ads.view.TKMediaView;
 
 import java.util.WeakHashMap;
 
@@ -33,6 +32,7 @@ public class TrekAdRenderer implements MoPubAdRenderer<TrekNative.TrekMediaEnabl
     private final boolean mInterActiveShowAction;
     private View mView;
     private boolean isMediaBackgroundBlack = false;
+
     /**
      * Constructs a native ad renderer with a view binder.
      *
@@ -75,7 +75,7 @@ public class TrekAdRenderer implements MoPubAdRenderer<TrekNative.TrekMediaEnabl
 
     @Override
     public boolean supports(@NonNull BaseNativeAd nativeAd) {
-        Preconditions.checkNotNull(nativeAd);
+//        Preconditions.checkNotNull(nativeAd);
         return nativeAd instanceof TrekNative.TrekMediaEnabledNativeAd;
     }
 
@@ -94,23 +94,19 @@ public class TrekAdRenderer implements MoPubAdRenderer<TrekNative.TrekMediaEnabl
         NativeImageHelper.loadImageView(nativeAd.getIconImageUrl(),
                 trekNativeViewHolder.getIconImageView());
 
-        final NativeVideoView nativeVideoView = trekNativeViewHolder.getNativeVideoView();
-        final TrekMediaView trekMediaView = trekNativeViewHolder.getTrekMediaView();
+        final TKMediaView trekMediaView = trekNativeViewHolder.getTrekMediaView();
 
         final String adtype = nativeAd.getExtras().get(TREK_ADTYPE).toString();
 
-        if (TextUtils.equals(adtype, "NATIVE_INTERACTIVE")) {
-            nativeAd.updateMediaView(mActivity, trekMediaView);
+        if (TextUtils.equals(adtype, "SUPR_AD")) {
+            nativeAd.updateMediaView(mActivity, view, trekMediaView);
             trekMediaView.setVisibility(View.VISIBLE);
-            trekMediaView.setMediaBackgroundBlack(isMediaBackgroundBlack);
+//            trekMediaView.setMediaBackgroundBlack(isMediaBackgroundBlack);
             if (mInterActiveShowAction) {
                 trekNativeViewHolder.getCallToActionView().setVisibility(VISIBLE);
             } else {
                 trekNativeViewHolder.getCallToActionView().setVisibility(View.GONE);
             }
-        } else if (nativeVideoView != null) {
-            nativeAd.updateVideoView(mActivity, view, nativeVideoView);
-            nativeVideoView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -121,9 +117,9 @@ public class TrekAdRenderer implements MoPubAdRenderer<TrekNative.TrekMediaEnabl
         }
     }
 
-    public TrekMediaView getMediaView() {
+    public TKMediaView getMediaView() {
         if (mView != null && mViewBinder.extras.containsKey("mediaView")) {
-            return (TrekMediaView) mView.findViewById(mViewBinder.extras.get("mediaView"));
+            return (TKMediaView) mView.findViewById(mViewBinder.extras.get("mediaView"));
         }
         return null;
     }
@@ -134,33 +130,25 @@ public class TrekAdRenderer implements MoPubAdRenderer<TrekNative.TrekMediaEnabl
 
     static class TrekNativeViewHolder {
         private final StaticNativeViewHolder mStaticNativeViewHolder;
-        private final NativeVideoView mNativeVideoView;
-        private final TrekMediaView mTrekMediaView;
+        private final TKMediaView mTrekMediaView;
 
         // Use fromViewBinder instead of a constructor
         private TrekNativeViewHolder(final StaticNativeViewHolder staticNativeViewHolder,
-                                     final NativeVideoView nativeVideoView,
-                                     final TrekMediaView trekMediaView) {
+                                     final TKMediaView trekMediaView) {
             mStaticNativeViewHolder = staticNativeViewHolder;
-            mNativeVideoView = nativeVideoView;
             mTrekMediaView = trekMediaView;
         }
 
         static TrekNativeViewHolder fromViewBinder(final View view,
                                                    final ViewBinder viewBinder) {
             StaticNativeViewHolder staticNativeViewHolder = StaticNativeViewHolder.fromViewBinder(view, viewBinder);
-            NativeVideoView nativeVideoView = null;
-            TrekMediaView trekMediaView = null;
-
-            if (viewBinder.extras.containsKey("videoView")) {
-                nativeVideoView = (NativeVideoView) view.findViewById(viewBinder.extras.get("videoView"));
-            }
+            TKMediaView trekMediaView = null;
 
             if (viewBinder.extras.containsKey("mediaView")) {
-                trekMediaView = (TrekMediaView) view.findViewById(viewBinder.extras.get("mediaView"));
+                trekMediaView = (TKMediaView) view.findViewById(viewBinder.extras.get("mediaView"));
             }
 
-            return new TrekNativeViewHolder(staticNativeViewHolder, nativeVideoView, trekMediaView);
+            return new TrekNativeViewHolder(staticNativeViewHolder, trekMediaView);
         }
 
         public View getMainView() {
@@ -191,11 +179,7 @@ public class TrekAdRenderer implements MoPubAdRenderer<TrekNative.TrekMediaEnabl
             return mStaticNativeViewHolder.privacyInformationIconImageView;
         }
 
-        public NativeVideoView getNativeVideoView() {
-            return mNativeVideoView;
-        }
-
-        public TrekMediaView getTrekMediaView() {
+        public TKMediaView getTrekMediaView() {
             return mTrekMediaView;
         }
     }

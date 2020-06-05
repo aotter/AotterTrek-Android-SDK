@@ -1,8 +1,10 @@
 package com.mopub.nativeads;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
 import android.widget.Adapter;
+
+import androidx.annotation.NonNull;
+
 
 
 public class TrekMoPubAdAdapter extends MoPubAdAdapter {
