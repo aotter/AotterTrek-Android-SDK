@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.aotter.net.treksampleapp.activity.NativeListViewActivity;
+import com.aotter.net.treksampleapp.activity.NativeMoPubListViewActivity;
 import com.aotter.net.treksampleapp.activity.NativeRCViewActivity;
 import com.aotter.net.treksampleapp.activity.SuprAdListViewActivity;
 
@@ -42,4 +43,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @OnClick(R.id.native_mopub_listview)
+    public void goMopubNativeList() {
+        Intent intent = new Intent();
+        intent.setClass(this, NativeMoPubListViewActivity.class);
+        startActivity(intent);
+    }
 }

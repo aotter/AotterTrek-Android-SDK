@@ -1,6 +1,5 @@
 package com.aotter.net.treksampleapp.activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.widget.ListView;
 
@@ -12,6 +11,7 @@ import com.aotter.net.treksampleapp.R;
 import com.aotter.net.treksampleapp.adapter.NativeListItemAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +23,6 @@ public class NativeListViewActivity extends AppCompatActivity {
     @BindView(R.id.listview)
     ListView mListView;
 
-    private Context mContext;
     private NativeListItemAdapter mAdapter;
     private TKAdN tkAdN;
 
@@ -43,29 +42,21 @@ public class NativeListViewActivity extends AppCompatActivity {
             "https://pnn.aotter.net/Media/show/2b588866-47b3-4344-bb38-c9e7194af576.jpg"
     };
 
-    private List<Object> mPostTitleList;
-    private List<Object> mPostImageList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_native_list_view);
         ButterKnife.bind(this);
-        mContext = this;
 
         //init List
-        mPostTitleList = new ArrayList<>();
-        mPostImageList = new ArrayList<>();
+        List<Object> mPostTitleList = new ArrayList<>();
+        List<Object> mPostImageList = new ArrayList<>();
 
-        for (String title : postTitle) {
-            mPostTitleList.add(title);
-        }
+        Collections.addAll(mPostTitleList, postTitle);
 
-        for (String image : postImage) {
-            mPostImageList.add(image);
-        }
+        Collections.addAll(mPostImageList, postImage);
 
-        mAdapter = new NativeListItemAdapter(mContext, mPostTitleList, mPostImageList);
+        mAdapter = new NativeListItemAdapter(this, mPostTitleList, mPostImageList);
         mListView.setAdapter(mAdapter);
         /**
          "post_third" is custom payload place name
