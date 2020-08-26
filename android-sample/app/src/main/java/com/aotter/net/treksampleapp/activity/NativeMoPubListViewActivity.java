@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
-import com.aotter.net.trek.ads.TKAdN;
 import com.aotter.net.treksampleapp.R;
 import com.aotter.net.treksampleapp.adapter.NativeListItemAdapter;
 import com.mopub.common.MoPub;
@@ -35,7 +34,6 @@ public class NativeMoPubListViewActivity extends AppCompatActivity {
     ListView mListView;
 
     private NativeListItemAdapter mAdapter;
-    private TKAdN tkAdN;
     private MoPubAdAdapter mAdAdapter;
     private TrekAdRenderer trekAdRenderer;
     private RequestParameters mRequestParameters;
@@ -127,12 +125,5 @@ public class NativeMoPubListViewActivity extends AppCompatActivity {
 
         mAdAdapter.loadAds("c23fe2eaea7c4522af307e1bb6aa7eda", mRequestParameters);
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (tkAdN != null)
-            tkAdN.resume();
     }
 }

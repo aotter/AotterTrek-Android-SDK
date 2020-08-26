@@ -12,6 +12,7 @@ import com.aotter.net.treksampleapp.R;
 import com.aotter.net.treksampleapp.adapter.SuprAdListItemAdapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,13 +58,8 @@ public class SuprAdListViewActivity extends AppCompatActivity {
         mPostTitleList = new ArrayList<>();
         mPostImageList = new ArrayList<>();
 
-        for (String title : postTitle) {
-            mPostTitleList.add(title);
-        }
-
-        for (String image : postImage) {
-            mPostImageList.add(image);
-        }
+        mPostTitleList.addAll(Arrays.asList(postTitle));
+        mPostImageList.addAll(Arrays.asList(postImage));
 
         mAdapter = new SuprAdListItemAdapter(mContext, mPostTitleList, mPostImageList);
         mListView.setAdapter(mAdapter);
