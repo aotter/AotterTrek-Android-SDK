@@ -3,6 +3,8 @@ package com.aotter.net.treksampleapp;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.aotter.net.trek.model.TKAdNative;
+import com.aotter.net.treksampleapp.activity.NativeAdMobViewActivity;
 import com.aotter.net.treksampleapp.activity.NativeListViewActivity;
 import com.aotter.net.treksampleapp.activity.NativeMoPubListViewActivity;
 import com.aotter.net.treksampleapp.activity.NativeRCViewActivity;
@@ -47,6 +49,14 @@ public class MainActivity extends AppCompatActivity {
     public void goMopubNativeList() {
         Intent intent = new Intent();
         intent.setClass(this, NativeMoPubListViewActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.native_admob_adview)
+    public void goAdMobView() {
+        Intent intent = new Intent();
+        intent.setClass(this, NativeAdMobViewActivity.class);
+
         startActivity(intent);
     }
 }

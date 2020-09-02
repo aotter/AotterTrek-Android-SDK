@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.aotter.net.treksampleapp"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.aotter.net.treksampleapp">
 
     <application
         android:name=".MyApplication"
@@ -9,26 +9,30 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8836593984677243~7213579413" />
 
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+        <activity android:name=".activity.NativeAdMobViewActivity"/>
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.NativeListViewActivity">
-        </activity>
-        <activity android:name=".activity.NativeMoPubListViewActivity"></activity>
-        <activity android:name=".activity.SuprAdListViewActivity">
-        </activity>
-        <activity android:name=".activity.NativeRCViewActivity">
-        </activity>
+        <activity android:name=".activity.NativeListViewActivity"></activity>
+        <activity android:name=".activity.NativeMoPubListViewActivity" />
+        <activity android:name=".activity.SuprAdListViewActivity"></activity>
+        <activity android:name=".activity.NativeRCViewActivity"></activity>
         <activity
             android:name="com.aotter.net.trek.ads.video.NativeVideoPlayerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 
 </manifest>

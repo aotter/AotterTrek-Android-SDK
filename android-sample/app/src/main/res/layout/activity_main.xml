@@ -68,5 +68,13 @@
             android:text="MopubListView"
             android:textAllCaps="false" />
 
+        <Button
+            android:id="@+id/native_admob_adview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="AdMobAdView NativeAd"
+            android:textAllCaps="false" />
+
     </LinearLayout>
 </RelativeLayout>
