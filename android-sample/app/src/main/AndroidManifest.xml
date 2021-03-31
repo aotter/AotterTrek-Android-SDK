@@ -10,25 +10,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.NativeListViewActivity">
-        </activity>
-        <activity android:name=".activity.NativeMoPubListViewActivity"></activity>
-        <activity android:name=".activity.SuprAdListViewActivity">
-        </activity>
-        <activity android:name=".activity.NativeRCViewActivity">
-        </activity>
+        <activity android:name=".activity.NativeListViewActivity" />
+        <activity android:name=".activity.NativeMoPubListViewActivity" />
+        <activity android:name=".activity.SuprAdListViewActivity" />
+        <activity android:name=".activity.NativeRCViewActivity" />
+        <activity android:name=".activity.BannerAdListViewActivity" />
         <activity
             android:name="com.aotter.net.trek.ads.video.NativeVideoPlayerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
 
 </manifest>

@@ -41,8 +41,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Supr AD"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
+            android:text="Supr.AD"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <Button
             android:id="@+id/suprad_listview"
@@ -51,7 +51,22 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="ListView"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="橫幅廣告"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Button
+            android:id="@+id/bannerad_listview"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="ListView"
+            android:textAllCaps="false" />
 
 
         <TextView

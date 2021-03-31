@@ -3,12 +3,14 @@ package com.aotter.net.treksampleapp;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.aotter.net.treksampleapp.activity.BannerAdListViewActivity;
 import com.aotter.net.treksampleapp.activity.NativeListViewActivity;
 import com.aotter.net.treksampleapp.activity.NativeMoPubListViewActivity;
 import com.aotter.net.treksampleapp.activity.NativeRCViewActivity;
 import com.aotter.net.treksampleapp.activity.SuprAdListViewActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -40,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
     public void goSuprAdList() {
         Intent intent = new Intent();
         intent.setClass(this, SuprAdListViewActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.bannerad_listview)
+    public void goBannerAdList() {
+        Intent intent = new Intent();
+        intent.setClass(this, BannerAdListViewActivity.class);
         startActivity(intent);
     }
 
