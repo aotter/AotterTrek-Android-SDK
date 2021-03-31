@@ -1,5 +1,7 @@
 # AotterTrek-Android-SDK
 ## 更新日誌
+- 2021/03/31 
+    - add Banner Ad support
 - 2020/07/01 
     - add mopub Mediation sample code 
 - 2020/01/22 release `3.1.8`
