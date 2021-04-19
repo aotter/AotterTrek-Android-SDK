@@ -153,6 +153,7 @@ public class TrekNative extends CustomEventNative {
 
             setTitle(mNativeAd.getAdTitle());
             setText(mNativeAd.getAdText());
+            setCallToAction(mNativeAd.getActionText());
 
             setMainImageUrl(mNativeAd.getAdImgMain());
             setIconImageUrl(mNativeAd.getAdImgIconHd());
